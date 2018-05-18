@@ -14,7 +14,7 @@ import os
 #make all the arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("-S", help="download package from AUR")
-#parser.add_argument("-Syu", help="download all the AUR package user has")
+parser.add_argument("-Syu", help="download all the AUR package user has", action = "store_true")
 args = parser.parse_args()
 #end all arguments
 directory = os.getcwd()
@@ -52,6 +52,23 @@ def cd_to_package_dir():
         exit()
     else:
         print ("error: invalid input")
-retrieve_file()
-extract_tar()
-#cd_to_package_dir()
+
+if args.S:
+    retrieve_file()
+    extract_tar()
+    #cd_to_package_dir()
+elif args.Syu:
+# places all the installed aur packages to a list
+# generate list and output to a text file so that we can read from it
+    subprocess.Popen("pacman -Qm | sed 's/ .*//' >> ./packages.txt", shell=True)
+    with open("packages.txt", "r") as packages:
+        installed_packages = [package.strip() for package in packages]
+    for package in installed_packages:
+        package_name = package
+        url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
+        tar_package = "{}.tar.gz".format(package_name)
+        retrieve_file()
+        extract_tar()
+
+else:
+    print("no argument given. launch 'pacwoman -h' to know all the options available")
