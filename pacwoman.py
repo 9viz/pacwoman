@@ -9,9 +9,16 @@ import os
     make arguments to download instead of input
     download all the AUR packages user when evoked with -Syu
     make a config file where user can enable colored output
+
 """
+#make all the arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("-S", help="download package from AUR")
+#parser.add_argument("-Syu", help="download all the AUR package user has")
+args = parser.parse_args()
+#end all arguments
 directory = os.getcwd()
-package_name = input()
+package_name = args.S
 url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
 tar_package = "{}.tar.gz".format(package_name)
 def retrieve_file():
@@ -28,7 +35,7 @@ def extract_tar():
 #deletes the downloaded tar to prevent duplicates and confusion.
     tar = tarfile.open(tar_package, "r:gz")
     print ("extracting downloaded tarball.")
-    tar.extractall
+    tar.extractall()
     tar.close()
     print ("extracted: downloaded {0}.tar.gz has been extracted".format(package_name))
     try:
