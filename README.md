@@ -16,7 +16,6 @@ Add the following to your .bashrc file located in your home directory.
 **Todo**
 
 Since this program is very much work in progress, there are a lot features which are yet to be done.
-- Make arguements to download instead of using input()
 - Download all the packages when evoked with "-Syu"
 - Make a config file where user can enable colored output and possibly alter the syntax.
 - Make the output pretty and more readable.
