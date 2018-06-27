@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# Made by Th3-Hum4n in Github https://github.com/Th3-Hum4n
+# Licensed under GPL v3. Feel free to edit it in the name of FREEDDOOOMM!
+
 import subprocess
 import error_insults
 import urllib.request
@@ -9,15 +13,14 @@ import configuration
 from random import randint
 
 """todo:
-    make a config file where user can enable colored output
-
+        find a way to input multiple packages at once. possibly using yaml(?)
 """
 directory = os.getcwd()
 package_name = ""
 url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
 tar_package = "{}.tar.gz".format(package_name)
 
-#change all colors to white if colored_output is set to False. pass when colored_output is set to True
+#change all colors to white if colored_output is set to False in configuration.py. pass when colored_output is set to True
 
 if configuration.colored_output == True:
     pass
@@ -86,7 +89,7 @@ if args.S:
 elif args.Syu:
 # places all the installed aur packages to a text file
 # read from the text file and generate a list
-    subprocess.Popen("pacman -Qm | sed 's/ .*//' >> ./packages.txt", shell=True)
+    subprocess.Popen("pacman -Qqm >> ./packages.txt", shell=True)
     with open("packages.txt", "r") as packages:
         installed_packages = [package.strip() for package in packages]
     for package in installed_packages:
