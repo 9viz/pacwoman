@@ -1,3 +1,5 @@
+from random import randint
+
 error_insults = [
         "I have been called worse",
         "Oh man. We almost had it. It's gone now!",
@@ -9,3 +11,9 @@ error_insults = [
         "Come on, you can do it!",
         "Do u spek inglish?"
         ]
+
+def print_insult():
+    num_insults = len(error_insults)
+    random_insult_index = randint(0, num_insults)
+    insult = error_insults[random_insult_index]
+    print(insult)

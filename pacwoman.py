@@ -3,18 +3,16 @@
 # Licensed under GPL v3. Feel free to edit it in the name of FREEDDOOOMM!
 
 import subprocess
-import error_insults
-import urllib.request
+import urllib.request, urllib.error
 import argparse
 import shutil
 import tarfile
 import os
-import configuration
-from random import randint
 
-"""todo:
-        find a way to input multiple packages at once. possibly using yaml(?)
-"""
+#import files
+import configuration
+import error_insults
+
 directory = os.getcwd()
 #package_name = ""
 #url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
@@ -30,23 +28,21 @@ if configuration.colored_output == False:
     configuration.color_progress = "\033[0m"
 
 def retrieve_file(package_name):
-#retrieves file from the AUR and saves it in the user set download dir. or fall back to cwd if there's no config file
+#retrieves file from the AUR and saves it to the current working dir 
     url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
     tar_package = "{}.tar.gz".format(package_name)
     try:
         with urllib.request.urlopen(url_package) as response, open(tar_package, 'wb') as out_file:
             shutil.copyfileobj(response, out_file)
         print ("{0}downloaded:{1} {2}.tar.gz has saved to {3}".format(configuration.color_successful, configuration.color_normal, package_name, directory))
-    except:
+    except urllib.error.HTTPError:
         if configuration.insults == True:
-            print(error_insults.error_insults[randint(0, len(error_insults.error_insults))])
-            exit()
-        elif configuration.insults == False:
-            print ("{0}error:{1} target not found: {2}".format(configuration.color_error, configuration.color_normal, package_name))
+            error_insults.print_insult()
             exit()
         else:
-            print ("you entered some gibberish in configuration.py")
-
+            print ("{0}error:{1} target not found: {2}".format(configuration.color_error, configuration.color_normal, package_name))
+            exit()
+        
 def extract_tar(package_name):
 #extracts the downloaded tar and saves it in the cwd.
 #deletes the downloaded tar to prevent duplicates and confusion.
@@ -57,23 +53,23 @@ def extract_tar(package_name):
     tar.close()
     print ("{0}extracted:{1} downloaded {2}.tar.gz has been extracted".format(configuration.color_successful, configuration.color_normal, package_name))
     try:
-        subprocess.Popen(["rm", "-r", "{}".format(tar_package)])
+        subprocess.Popen("rm -rf {0}".format(tar_package), shell=True)
         print ("{0}removed: {1}tar package has been removed and the contents has been stored in {2}/{3}".format(configuration.color_progress, configuration.color_normal, directory, package_name))
     except:
         print ("{0}error:{1} can't remove downloaded tarbar, please remove it manually").format(configuration.color_error, configuration.color_normal)
 
 def cd_to_package_dir():
     cd_to_dir = input("do you want to cd into the package directory? (y/n) ")
-    if cd_to_dir.lower == "yes" or cd_to_dir.lower == "y":
-        subprocess.Popen(["cd", "{}".format(package_name)])
-    elif cd_to_dir.lower == "no" or cd_to_dir.lower == "n":
+    if cd_to_dir.lower() == "yes" or cd_to_dir.lower() == "y":
+        subprocess.Popen("cd {0}".format(package_name), shell=True)
+    elif cd_to_dir.lower() == "no" or cd_to_dir.lower() == "n":
         exit()
     else:
         print ("error: invalid input")
 
 #make all the arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("-S", help="download package from AUR", nargs='+')
+parser.add_argument("-S", metavar='', help="download package from AUR", nargs='+', default=None)
 parser.add_argument("-Syu", help="download all the AUR package user has", action = "store_true")
 args = parser.parse_args()
 #end all arguments
@@ -83,7 +79,8 @@ if args.S:
     for package_name in package_list:
         retrieve_file(package_name)
         extract_tar(package_name)
-        #cd_to_package_dir()
+        if configuration.cd_to_package == True:
+            cd_to_package_dir()
 elif args.Syu:
 # places all the installed aur packages to a text file
 # read from the text file and generate a list
@@ -94,6 +91,5 @@ elif args.Syu:
         package_name = package
         retrieve_file(package_name)
         extract_tar(package_name)
-
 else:
-    print("{0}error:{1} no argument given. launch 'pacwoman -h' to know all the options available").format(configuration.color_error, configuration.color_normal)
+    print("{0}error:{1} no argument given. launch 'pacwoman -h' to know all the options available".format(configuration.color_error, configuration.color_normal))
