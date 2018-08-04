@@ -14,18 +14,31 @@ import configuration
 import error_insults
 
 directory = os.getcwd()
+
+#get username
+subprocess.Popen("echo $USER > /tmp/username", shell=True)
+with open("/tmp/username", 'r') as username_file:
+    for line in username_file:
+        username = line
+
+#terminate if the user is root
+if username == "root\n":
+    print("{0}error:{1} this program is not allowed to be launched as root!".format(configuration.color_error, configuration.color_normal))
+    exit()
+
+#url and tar file template
 #package_name = ""
 #url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
 #tar_package = "{}.tar.gz".format(package_name)
 
-#change all colors to white if colored_output is set to False in configuration.py. pass when colored_output is set to True
+#change all colors to empty strings if colored_output is set to False in configuration.py
 
 if configuration.colored_output == False:
-    #set everything to white
-    configuration.color_normal = "\033[0m"
-    configuration.color_error = "\033[0m"
-    configuration.color_successful = "\033[0m"
-    configuration.color_progress = "\033[0m"
+    #set everything to empty strings 
+    configuration.color_normal = ""
+    configuration.color_error = ""
+    configuration.color_successful = ""
+    configuration.color_progress = ""
 
 def retrieve_file(package_name):
 #retrieves file from the AUR and saves it to the current working dir 
@@ -56,7 +69,7 @@ def extract_tar(package_name):
         subprocess.Popen("rm -rf {0}".format(tar_package), shell=True)
         print ("{0}removed: {1}tar package has been removed and the contents has been stored in {2}/{3}".format(configuration.color_progress, configuration.color_normal, directory, package_name))
     except:
-        print ("{0}error:{1} can't remove downloaded tarbar, please remove it manually").format(configuration.color_error, configuration.color_normal)
+        print ("{0}error:{1} can't remove downloaded tarball, please remove it manually").format(configuration.color_error, configuration.color_normal)
 
 def cd_to_package_dir():
     cd_to_dir = input("do you want to cd into the package directory? (y/n) ")
