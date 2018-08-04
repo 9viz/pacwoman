@@ -16,25 +16,23 @@ from random import randint
         find a way to input multiple packages at once. possibly using yaml(?)
 """
 directory = os.getcwd()
-package_name = ""
-url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
-tar_package = "{}.tar.gz".format(package_name)
+#package_name = ""
+#url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
+#tar_package = "{}.tar.gz".format(package_name)
 
 #change all colors to white if colored_output is set to False in configuration.py. pass when colored_output is set to True
 
-if configuration.colored_output == True:
-    pass
-elif configuration.colored_output == False:
+if configuration.colored_output == False:
     #set everything to white
     configuration.color_normal = "\033[0m"
     configuration.color_error = "\033[0m"
     configuration.color_successful = "\033[0m"
     configuration.color_progress = "\033[0m"
-else:
-    print ("you entered some gibberish in configuration.py")
 
-def retrieve_file():
+def retrieve_file(package_name):
 #retrieves file from the AUR and saves it in the user set download dir. or fall back to cwd if there's no config file
+    url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
+    tar_package = "{}.tar.gz".format(package_name)
     try:
         with urllib.request.urlopen(url_package) as response, open(tar_package, 'wb') as out_file:
             shutil.copyfileobj(response, out_file)
@@ -49,9 +47,10 @@ def retrieve_file():
         else:
             print ("you entered some gibberish in configuration.py")
 
-def extract_tar():
+def extract_tar(package_name):
 #extracts the downloaded tar and saves it in the cwd.
 #deletes the downloaded tar to prevent duplicates and confusion.
+    tar_package = "{}.tar.gz".format(package_name)
     tar = tarfile.open(tar_package, "r:gz")
     print ("{0}extracting downloaded tarball.".format(configuration.color_progress))
     tar.extractall()
@@ -74,18 +73,17 @@ def cd_to_package_dir():
 
 #make all the arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("-S", help="download package from AUR")
+parser.add_argument("-S", help="download package from AUR", nargs='+')
 parser.add_argument("-Syu", help="download all the AUR package user has", action = "store_true")
 args = parser.parse_args()
 #end all arguments
 
-if args.S:
-    package_name = args.S
-    url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
-    tar_package = "{}.tar.gz".format(package_name)
-    retrieve_file()
-    extract_tar()
-    #cd_to_package_dir()
+if args.S: 
+    package_list = args.S
+    for package_name in package_list:
+        retrieve_file(package_name)
+        extract_tar(package_name)
+        #cd_to_package_dir()
 elif args.Syu:
 # places all the installed aur packages to a text file
 # read from the text file and generate a list
@@ -94,10 +92,8 @@ elif args.Syu:
         installed_packages = [package.strip() for package in packages]
     for package in installed_packages:
         package_name = package
-        url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
-        tar_package = "{}.tar.gz".format(package_name)
-        retrieve_file()
-        extract_tar()
+        retrieve_file(package_name)
+        extract_tar(package_name)
 
 else:
     print("{0}error:{1} no argument given. launch 'pacwoman -h' to know all the options available").format(configuration.color_error, configuration.color_normal)
