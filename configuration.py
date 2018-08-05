@@ -9,8 +9,9 @@ colored_output = False
 # colors declaration in ANSI code.
 color_normal = "\033[0m" # default: white
 color_error = "\033[1;31m" # default: red
-color_successful = "\033[1;32m"# default: green
-color_progress = "\033[33m"
+color_successful = "\033[1;32m" # default: green
+color_progress = "\033[33m" # default: yellow
+color_search_heading = "\033[34m" # default: blue
 
 # set it to "True", if you want to cd into the package directory
 # default is "False"

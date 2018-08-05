@@ -12,6 +12,7 @@ import os
 #import files
 import configuration
 import error_insults
+import search
 
 directory = os.getcwd()
 
@@ -84,6 +85,7 @@ def cd_to_package_dir():
 parser = argparse.ArgumentParser()
 parser.add_argument("-S", metavar='', help="download package from AUR", nargs='+', default=None)
 parser.add_argument("-Syu", help="download all the AUR package user has", action = "store_true")
+parser.add_argument("-s", metavar="", help="fetch data of the package using the AUR RPC interface", nargs="+")
 args = parser.parse_args()
 #end all arguments
 
@@ -104,5 +106,9 @@ elif args.Syu:
         package_name = package
         retrieve_file(package_name)
         extract_tar(package_name)
+elif args.s:
+    package_list = args.s
+    for package_name in package_list:
+        search.search(package_name)
 else:
     print("{0}error:{1} no argument given. launch 'pacwoman -h' to know all the options available".format(configuration.color_error, configuration.color_normal))
