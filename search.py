@@ -13,6 +13,7 @@ if configuration.colored_output == False:
     configuration.color_search_heading = ""
 
 def pretty_print_json(json_data):
+    nth_iteration = 0
     num_results = len(json_data["results"])
     print("{0}Results:{1} {2}\n".format(configuration.color_search_heading, configuration.color_normal, num_results))
     for package in json_data["results"]:
@@ -24,7 +25,8 @@ def pretty_print_json(json_data):
         print("{0}Maintainer:{1} {2}".format(configuration.color_search_heading, configuration.color_normal, package_maintainer))
         package_description = package["Description"]
         print("{0}Description:{1} {2}".format(configuration.color_search_heading, configuration.color_normal, package_description))
-        if num_results > 1:
+        nth_iteration += 1
+        if num_results > 1 and not nth_iteration == num_results:
             print("\n")
 
 def search(package_name):
