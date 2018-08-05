@@ -22,3 +22,13 @@ cd_to_package = False
 # set it to "True" if you want to use this script as a root user
 # default is "False"
 root_execute = False
+
+# sets the option you can search by.
+# available options are name, name-desc, maintainer, none
+# name only searches the package's name
+# name-desc searches the package's name and its description
+# maintainer searches the maintainer's name
+# none searches for everything
+# NOTE: It is important that you don't assign an invalid value to the variable. If you do, search simply won't work!
+# default is name
+search_type = "name" 

@@ -14,13 +14,16 @@ import configuration
 import error_insults
 import search
 
-directory = os.getcwd()
-
 #get username
+#calling Popen twice to ensure that the username is written to file. This is a workaround and if a better solution is know, please pull request.
+subprocess.Popen("echo $USER > /tmp/username", shell=True)
 subprocess.Popen("echo $USER > /tmp/username", shell=True)
 with open("/tmp/username", "r") as username_file:
     for line in username_file:
         username = line
+
+#get current directory
+directory = os.getcwd()
 
 #terminate if the user is root
 if username == "root\n" and configuration.root_execute == False:
