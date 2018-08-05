@@ -15,3 +15,7 @@ color_progress = "\033[33m"
 # set it to "True", if you want to cd into the package directory
 # default is "False"
 cd_to_package = False
+
+# set it to "True" if you want to use this script as a root user
+# default is "False"
+root_execute = False

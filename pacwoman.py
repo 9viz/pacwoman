@@ -17,12 +17,12 @@ directory = os.getcwd()
 
 #get username
 subprocess.Popen("echo $USER > /tmp/username", shell=True)
-with open("/tmp/username", 'r') as username_file:
+with open("/tmp/username", "r") as username_file:
     for line in username_file:
         username = line
 
 #terminate if the user is root
-if username == "root\n":
+if username == "root\n" and configuration.root_execute == False:
     print("{0}error:{1} this program is not allowed to be launched as root!".format(configuration.color_error, configuration.color_normal))
     exit()
 
