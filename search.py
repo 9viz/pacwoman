@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 #Get package's info in json using the AUR's RPC interface
+#Accompanies pacwoman.py
 
 import json
 import urllib.request

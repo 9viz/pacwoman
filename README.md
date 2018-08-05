@@ -22,7 +22,6 @@ The main reason why I adopted this "download-only" model is because I liked to r
 **Goals for the Future**
 
 -Add some sort of tab-completion support.
--List the details of the packages.
 
 **What this project won't do**
 
@@ -30,5 +29,8 @@ The main reason why I adopted this "download-only" model is because I liked to r
 -Resolve AUR dependencies
 
 I want this project to stay simple and hackable, and follow the suckless philoshopy of keeping the source code less than 2000 lines. The latter is for me to write efficient code, and is an interesting challenge.
+
+
+I think this project reached all the realistic goals I wanted to have. So the development on this project, from this point, will be really slow.
 
 DISCLAIMER: This is my first large python project which depends on a lot of sub modules. So bad code ahead. Pointing out bad code and saying how to improve it really appreciated.

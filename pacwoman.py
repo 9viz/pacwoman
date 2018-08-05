@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # Made by Th3-Hum4n in Github https://github.com/Th3-Hum4n
 # Licensed under GPL v3. Feel free to edit it in the name of FREEDDOOOMM!
 

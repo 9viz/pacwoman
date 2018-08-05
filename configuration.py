@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 # if you want to disable error insults, then set it to "True"
 # default is "False"
 insults = False 
