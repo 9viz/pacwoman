@@ -8,6 +8,8 @@ import argparse
 import shutil
 import tarfile
 import os
+import json
+from getpass import getuser
 
 #import files
 import configuration
@@ -15,20 +17,11 @@ import error_insults
 import search
 
 #get username
-#calling Popen twice to ensure that the username is written to file. This is a workaround and if a better solution is know, please pull request.
-subprocess.Popen("echo $USER > /tmp/username", shell=True)
-subprocess.Popen("echo $USER > /tmp/username", shell=True)
-with open("/tmp/username", "r") as username_file:
-    for line in username_file:
-        username = line
+if getuser() == "root" and configuration.root_execute == False:
+    print("{0}error:{1} this program is not allowed to be used as the root user".format(configuration.color_error, configuration.color_normal))
 
 #get current directory
 directory = os.getcwd()
-
-#terminate if the user is root
-if username == "root\n" and configuration.root_execute == False:
-    print("{0}error:{1} this program is not allowed to be launched as root!".format(configuration.color_error, configuration.color_normal))
-    exit()
 
 #url and tar file template
 #package_name = ""
@@ -84,9 +77,38 @@ def cd_to_package_dir():
     else:
         print ("error: invalid input")
 
+# update all packages which are not up-to-date
+def smart_update_package():
+    # get packages installed with their version number
+    subprocess.Popen("pacman -Qm > ./ver_packages.txt", shell=True)
+    with open("{0}/ver_packages.txt".format(directory), "r") as packages:
+        installed_packages_ver = [package.strip() for package in packages]
+    
+    # get packages installed without version number
+    subprocess.Popen("pacman -Qqm > ./packages.txt", shell=True)
+    with open("{0}/packages.txt".format(directory), "r") as packages:
+        installed_packages = [package.strip() for package in packages]
+    
+    # really loopy way to download packages. explanation below
+    # check if the package with the version in the user system is equal to the package with the version available in the aur
+    # if it is, update; else, break the loop 
+    for package_name in installed_packages:
+        rpc_url = "https://aur.archlinux.org/rpc/?v=5&type=search&by=name&arg={0}".format(package_name)
+        package_data = urllib.request.urlopen(rpc_url) #request json
+        package_data = json.loads(package_data.read()) #set package_data to decoded json 
+        for result in package_data["results"]: 
+            if result["Name"] == package_name: 
+                aur_package_with_ver = "{0} {1}".format(result["Name"], result["Version"])
+                for package_with_ver in installed_packages_ver:
+                    if package_with_ver != aur_package_with_ver: 
+                        retrieve_file(package_name)
+                        extract_tar(package_name)
+            else:
+                break
+
 #make all the arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("-S", metavar='', help="download package from AUR", nargs='+', default=None)
+parser.add_argument("-S", metavar="", help="download package from AUR", nargs="+", default=None)
 parser.add_argument("-Syu", help="download all the AUR package user has", action = "store_true")
 parser.add_argument("-s", metavar="", help="fetch data of the package using the AUR RPC interface", nargs="+")
 args = parser.parse_args()
@@ -100,15 +122,8 @@ if args.S:
         if configuration.cd_to_package == True:
             cd_to_package_dir()
 elif args.Syu:
-# places all the installed aur packages to a text file
-# read from the text file and generate a list
-    subprocess.Popen("pacman -Qqm >> ./packages.txt", shell=True)
-    with open("packages.txt", "r") as packages:
-        installed_packages = [package.strip() for package in packages]
-    for package in installed_packages:
-        package_name = package
-        retrieve_file(package_name)
-        extract_tar(package_name)
+    # read comments in the function to understand how it works.
+    smart_update_package()
 elif args.s:
     package_list = args.s
     for package_name in package_list:

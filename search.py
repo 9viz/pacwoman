@@ -37,4 +37,3 @@ def search(package_name):
     search_data = urllib.request.urlopen(rpc_url) #get json
     search_data = json.loads(search_data.read()) #decode json to python
     pretty_print_json(search_data) #pretty print json data 
-
