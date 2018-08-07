@@ -10,6 +10,7 @@ import tarfile
 import os
 import json
 from getpass import getuser
+from time import sleep
 
 #import files
 import configuration
@@ -80,15 +81,21 @@ def cd_to_package_dir():
 # update all packages which are not up-to-date
 def smart_update_package():
     # get packages installed with their version number
-    subprocess.Popen("pacman -Qm > ./ver_packages.txt", shell=True)
+    get_package_with_ver = subprocess.Popen("pacman -Qm > ./ver_packages.txt", shell=True)
+    get_package_with_ver.wait() 
     with open("{0}/ver_packages.txt".format(directory), "r") as packages:
         installed_packages_ver = [package.strip() for package in packages]
+    rm_file = subprocess.Popen("rm -rf ./ver_packages.txt", shell=True)
+    rm_file.wait()
     
     # get packages installed without version number
-    subprocess.Popen("pacman -Qqm > ./packages.txt", shell=True)
+    get_package = subprocess.Popen("pacman -Qqm > ./packages.txt", shell=True)
+    get_package.wait() 
     with open("{0}/packages.txt".format(directory), "r") as packages:
         installed_packages = [package.strip() for package in packages]
-    
+    rm_file = subprocess.Popen("rm -rf ./packages.txt", shell=True)
+    rm_file.wait()
+   
     # really loopy way to download packages. explanation below
     # check if the package with the version in the user system is equal to the package with the version available in the aur
     # if it is, update; else, break the loop 
