@@ -110,8 +110,7 @@ def smart_update_package():
                     if package_with_ver != aur_package_with_ver: 
                         retrieve_file(package_name)
                         extract_tar(package_name)
-            else:
-                break
+                break #exit out of the loop after downloading the updated package
 
 #make all the arguments
 parser = argparse.ArgumentParser()
