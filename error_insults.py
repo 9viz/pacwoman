@@ -16,6 +16,6 @@ error_insults = [
 
 def print_insult():
     num_insults = len(error_insults)
-    random_insult_index = randint(0, num_insults)
+    random_insult_index = randint(0, num_insults - 1)
     insult = error_insults[random_insult_index]
     print(insult)
