@@ -10,7 +10,6 @@ import tarfile
 import os
 import json
 from getpass import getuser
-from time import sleep
 
 #import files
 import configuration
@@ -24,15 +23,8 @@ if getuser() == "root" and configuration.root_execute == False:
 #get current directory
 directory = os.getcwd()
 
-#url and tar file template
-#package_name = ""
-#url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/{}.tar.gz".format(package_name)
-#tar_package = "{}.tar.gz".format(package_name)
-
 #change all colors to empty strings if colored_output is set to False in configuration.py
-
 if configuration.colored_output == False:
-    #set everything to empty strings 
     configuration.color_normal = ""
     configuration.color_error = ""
     configuration.color_successful = ""
@@ -117,6 +109,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-S", metavar="", help="download package from AUR", nargs="+", default=None)
 parser.add_argument("-Syu", help="download all the AUR package user has", action = "store_true")
 parser.add_argument("-s", metavar="", help="fetch data of the package using the AUR RPC interface", nargs="+")
+parser.add_argument("-c", help="set the config file directory", metavar=" ")
 args = parser.parse_args()
 #end all arguments
 
@@ -134,5 +127,7 @@ elif args.s:
     package_list = args.s
     for package_name in package_list:
         search.search(package_name)
+elif args.c:
+    configuration.writeConfigDir(args.c)
 else:
     print("{0}error:{1} no argument given. launch 'pacwoman -h' to know all the options available".format(configuration.color_error, configuration.color_normal))

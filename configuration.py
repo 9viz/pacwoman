@@ -1,34 +1,44 @@
 #!/usr/bin/python3
+import yaml
+import os
 
-# if you want to disable error insults, then set it to "True"
-# default is "False"
-insults = False 
+# write config file path name in $HOME/.cache/pacwoman/configpath
+def writeConfigDir(config_path):
+    if os.path.exists("{0}/.cache/pacwoman".format(os.getenv("HOME"))):
+        with open("{0}/.cache/pacwoman/config_path".format(os.getenv("HOME")), "w+") as configpath:
+            configpath.write(config_path)
+    else:
+        os.mkdir("{0}/.cache/pacwoman".format(os.getenv("HOME")))
+        with open("{0}/.cache/pacwoman/config_path".format(os.getenv("HOME")), "w+") as configpath:
+            configpath.write(config_path)
 
-# set it to "True" if you want colored output
-# default is "False"
-colored_output = False 
+# read config file directory
+def getConfigDir():
+    global config_path
+    with open("{0}/.cache/pacwoman/config_path".format(os.getenv("HOME")), "r") as file_config_path:
+        config_path = file_config_path.read()
+    config_path.strip("\n")
 
-# colors declaration in ANSI code.
-color_normal = "\033[0m" # default: white
-color_error = "\033[1;31m" # default: red
-color_successful = "\033[1;32m" # default: green
-color_progress = "\033[33m" # default: yellow
-color_search_heading = "\033[34m" # default: blue
+# decode yaml data
+def readConfig(file_name):
+    global config 
+    with open(file_name, "r") as config_file:
+        config = yaml.load(config_file)
 
-# set it to "True", if you want to cd into the package directory
-# default is "False"
-cd_to_package = False
+if os.path.isfile("{0}/.cache/pacwoman/config_path".format(os.getenv("HOME"))) == False:
+    readConfig("{0}/res/config.yaml".format(os.path.realpath(__file__).strip("configuration.py")))
+else:
+    getConfigDir()
+    readConfig(config_path)
 
-# set it to "True" if you want to use this script as a root user
-# default is "False"
-root_execute = False
-
-# sets the option you can search by.
-# available options are name, name-desc, maintainer, none
-# name only searches the package's name
-# name-desc searches the package's name and its description
-# maintainer searches the maintainer's name
-# none searches for everything
-# NOTE: It is important that you don't assign an invalid value to the variable. If you do, search simply won't work!
-# default is name
-search_type = "name" 
+# set all variables
+insults = config["insults"]
+colored_output = config["colored_output"]
+color_normal = bytes(config["color_normal"], "utf-8").decode("unicode_escape")
+color_error = bytes(config["color_error"], "utf-8").decode("unicode_escape")
+color_successful = bytes(config["color_successful"], "utf-8").decode("unicode_escape")
+color_progress = bytes(config["color_progress"], "utf-8").decode("unicode_escape")
+color_search_heading = bytes(config["color_search_heading"], "utf-8").decode("unicode_escape")
+cd_to_package = config["cd_to_package"]
+root_execute = config["root_execute"]
+search_type = config["search_type"]
