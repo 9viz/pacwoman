@@ -1,7 +1,7 @@
 **pacwoman**
 
 A simple AUR helper which only downloads the packages and does nothing other than. It's written in python 3.6 and is very much work in progress.
-Note: It does not download dependencies automatically. That is something the user have to do.
+NOTE: It does not download dependencies automatically. That is something the user have to do.
 
 **Usage**
 
@@ -12,6 +12,11 @@ To launch it easier, add an alias to your shell.
 Example:
 Add the following to your .bashrc file located in your home directory.
 ```alias pacwoman="python /path/to/pacwoman.py"```
+
+
+To use a custom configuration, run `pacwoman -c /full/path/to/config.yaml`. NOTE: The path should be the full path. Ex: If my configuration is present in `$HOME/etc/pacwoman.conf`, I have to run `pacwoman -c /home/the_human/etc/pacwoman.conf`
+
+The default configuration is located at `res/config.yaml`. You may edit that to make a custom config
 
 **The Why**
 
@@ -26,6 +31,7 @@ The main reason why I adopted this "download-only" model is because I liked to r
 **What this project won't do**
 
 -Be a wrapper around pacman, like yay.
+
 -Resolve AUR dependencies
 
 I want this project to stay simple and hackable, and follow the suckless philoshopy of keeping the source code less than 2000 lines. The latter is for me to write efficient code, and is an interesting challenge.
