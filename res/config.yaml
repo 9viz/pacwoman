@@ -1,0 +1,34 @@
+# if you want to disable error insults, then set it to true
+# default is false
+insults: false
+
+# if you want colored output, set it to true
+# default is false
+colored_output: false
+
+# NOTE: this get ignored if you set colored_output to false
+# color declarations in ANSI code
+color_normal: \033[0m # default: white
+color_error: \033[1;31m # default: red
+color_successful: \033[1;32m # default: green
+color_progress: \033[33m # default: yellow
+color_search_heading: \033[34m # default: blue
+
+# if you want to cd into the package directory, set it to true
+# default it false
+cd_to_package: false
+
+# if you want to use this script as root, set it to true
+# default if false
+# NOTE: I highly recommend to set this to false
+root_execute: false
+
+# sets the option you can search by.
+# available options are name, name-desc, maintainer, none
+# name only searches the package's name
+# name-desc searches the package's name and its description
+# maintainer searches the maintainer's name
+# none searches for everything
+# NOTE: It is important that you don't assign an invalid value to the variable. If you do, search simply won't work!
+# default is name
+search_type: name 
