@@ -29,11 +29,11 @@ def pretty_print_json(json_data):
         if num_results > 1 and not nth_iteration == num_results:
             print("\n")
 
-def search(package_name):
-    if configuration.search_type == "none" or configuration.search_type == None:
+def search(package_name, search_type):
+    if search_type == "none" or search_type == None:
         rpc_url = "https://aur.archlinux.org/rpc/?v=5&type=search&arg={0}".format(package_name)
     else:
-        rpc_url = "https://aur.archlinux.org/rpc/?v=5&type=search&by={0}&arg={1}".format(configuration.search_type, package_name)
+        rpc_url = "https://aur.archlinux.org/rpc/?v=5&type=search&by={0}&arg={1}".format(search_type, package_name)
     search_data = urllib.request.urlopen(rpc_url) #get json
     search_data = json.loads(search_data.read()) #decode json to python
-    pretty_print_json(search_data) #pretty print json data 
+    return search_data 

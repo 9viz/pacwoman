@@ -92,9 +92,7 @@ def smart_update_package():
     # check if the package with the version in the user system is equal to the package with the version available in the aur
     # if it is, update; else, break the loop 
     for package_name in installed_packages:
-        rpc_url = "https://aur.archlinux.org/rpc/?v=5&type=search&by=name&arg={0}".format(package_name)
-        package_data = urllib.request.urlopen(rpc_url) #request json
-        package_data = json.loads(package_data.read()) #set package_data to decoded json 
+        package_data = search.search(package_name, "name")
         for result in package_data["results"]: 
             if result["Name"] == package_name: 
                 aur_package_with_ver = "{0} {1}".format(result["Name"], result["Version"])
@@ -102,7 +100,7 @@ def smart_update_package():
                     if package_with_ver != aur_package_with_ver: 
                         retrieve_file(package_name)
                         extract_tar(package_name)
-                break #exit out of the loop after downloading the updated package
+                        break #exit out of the loop after downloading the updated package
 
 #make all the arguments
 parser = argparse.ArgumentParser()
@@ -126,7 +124,8 @@ elif args.Syu:
 elif args.s:
     package_list = args.s
     for package_name in package_list:
-        search.search(package_name)
+        search_data = search.search(package_name, configuration.search_type)
+        search.pretty_print_json(search_data)
 elif args.c:
     configuration.writeConfigDir(args.c)
 else:
