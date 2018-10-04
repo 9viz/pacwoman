@@ -1,42 +1,42 @@
-**pacwoman**
+# pacwoman
 
-A simple AUR helper which only downloads the packages and does nothing other than. It's written in python 3.6 and is very much work in progress.
-NOTE: It does not download dependencies automatically. That is something the user have to do.
+![logo](https://github.com/Th3-Hum4n/pacwoman/blob/master/pacwoman-logo.png)
 
-**Usage**
+A search and download-only AUR helper with an aim to write scripts around it easier. It uses python 3 and uses one external package for configuration making it portable.
 
-In your terminal, type ```python /path/to/pacwoman.py```
-And enter the package name you want to download when prompted.
+# Dependencies
 
-To launch it easier, add an alias to your shell.
-Example:
-Add the following to your .bashrc file located in your home directory.
-```alias pacwoman="python /path/to/pacwoman.py"```
+* python3
+* pyyaml
 
+To install `pyyaml`, run `pip3 install pyyaml --user` in your terminal.
 
-To use a custom configuration, run `pacwoman -c /path/to/config.yaml`.
+# Usage
 
-The default configuration is located at `res/config.yaml`. You may edit that to make a custom config
+pacwoman doesn't have any setup file and won't have one either. It is designed to be like that.
 
-**The Why**
+To launch it, run `python3 /path/to/pacwoman.py`. To make it easier to launch the script, make an alias to call the above command in your shellrc.
+
+pacwoman has a config file which you can edit to suit your needs. The default config is located at `res/config.yaml`. To use a custom config, DO NOT edit `res/config.yaml` rather copy it and specify the path of the custom config to pacwoman by running `pacwoman -c /path/to/config/file`
+
+# The Why
 
 The reason why this program only downloads the PKGBUILD and does nothing else is because many Arch Users blindly use AUR helpers like yay and install AUR packages without reading the PKGBUILD. New arch users don't realize that AUR packages can contain **malware**, once if found, there are deleted. The way we can find if a package is malicious or not is by reading the PKGBUILD.
 
 The main reason why I adopted this "download-only" model is because I liked to run makepkg myself and I wanted the end user, including me, to read the PKGBUILD more often. I admit that when I used arch for the first time, I didn't read the PKGBUILDs. I started to read them once I found out that AUR packages are not checked, i.e., devs don't check if they have malware.
 
-**Goals for the Future**
-
--Add some sort of tab-completion support.
-
-**What this project won't do**
-
--Be a wrapper around pacman, like yay.
-
--Resolve AUR dependencies
 
 I want this project to stay simple and hackable, and follow the suckless philoshopy of keeping the source code less than 2000 lines. The latter is for me to write efficient code, and is an interesting challenge.
 
+# Goals for the future
 
-I think this project reached all the realistic goals I wanted to have. So the development on this project, from this point, will be really slow.
+* Add some sort of tab-completion support.
 
-DISCLAIMER: This is my first large python project which depends on a lot of sub modules. So bad code ahead. Pointing out bad code and saying how to improve it really appreciated.
+# (Non-)Features
+
+* Be a wrapper around pacman, like yay.
+* Resolve AUR dependencies.
+
+# Credits
+
+The logo was made by [0xfi](https://github.com/0xfi)
