@@ -22,8 +22,8 @@ def getConfigDir():
 # decode yaml data
 def readConfig(file_name):
     global config 
-    with open(file_name, "r") as config_file:
-        config = yaml.load(config_file)
+    with open(file_name.strip("\n"), "r") as config_file:
+        config = yaml.load(config_file) 
 
 if os.path.isfile("{0}/.cache/pacwoman/config_path".format(os.getenv("HOME"))) == False:
     readConfig("{0}/res/config.yaml".format(os.path.realpath(__file__).strip("configuration.py")))

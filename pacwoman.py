@@ -127,6 +127,6 @@ elif args.s:
         search_data = search.search(package_name, configuration.search_type)
         search.pretty_print_json(search_data)
 elif args.c:
-    configuration.writeConfigDir(args.c)
+    configuration.writeConfigDir(os.path.abspath(args.c))
 else:
     print("{0}error:{1} no argument given. launch 'pacwoman -h' to know all the options available".format(configuration.color_error, configuration.color_normal))

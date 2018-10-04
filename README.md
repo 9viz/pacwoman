@@ -14,7 +14,7 @@ Add the following to your .bashrc file located in your home directory.
 ```alias pacwoman="python /path/to/pacwoman.py"```
 
 
-To use a custom configuration, run `pacwoman -c /full/path/to/config.yaml`. NOTE: The path should be the full path. Ex: If my configuration is present in `$HOME/etc/pacwoman.conf`, I have to run `pacwoman -c /home/the_human/etc/pacwoman.conf`
+To use a custom configuration, run `pacwoman -c /path/to/config.yaml`.
 
 The default configuration is located at `res/config.yaml`. You may edit that to make a custom config
 
