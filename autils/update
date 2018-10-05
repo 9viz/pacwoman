@@ -1,0 +1,50 @@
+#!/bin/dash
+# A wrapper script around pacwoman to automatically update all the packages
+# pacwoman path. since this script is personal, I set it to my mine
+pacwoman="$HOME/usr/src/pacwoman/pacwoman.py"
+EDITOR="nvim"
+
+# let's switch to a dir in /tmp to avoid puking in current working directory
+# but ofc, we need to make a directory first
+mkdir -p /tmp/aur_update/packages
+cd /tmp/aur_update/packages
+
+# let's store this directory in var
+pkgs_dir="/tmp/aur_update/packages"
+
+# let's call pacwoman to download all the AUR packages
+echo "calling pacwoman to download outdated packages"
+python3 $pacwoman -Syu
+
+# let's check if there are packages to be actually updated
+num_dir="$(ls /tmp/aur_update/packages | wc -l)"
+
+# now, we have to loop through all the directories and update each package
+for pkg_dir in $pkgs_dir
+do
+    # break if no packages are downloaded
+    # we don't need to echo a message saying that the packages are up to date since pacwoman already does that for us
+    [ $num_dir -eq 0 ] && break
+    cd $pkg_dir
+
+    echo "current package is ${pkg_dir}"
+
+    # ask the user if they want to edit PKGBUILD
+    read -p "Do you want to edit PKGBUILD? [y/n]" edit_pkgbuild
+
+    # open our editor when the answer is y or yes or Y
+    # we don't need to check if the user entered no or n since it doesn't require an extra step or two
+    case "$edit_pkgbuild" in
+    "y" | "yes" | "Y")
+        [ -z "$EDITOR" ] && read -p "Enter your editor's name (if you don't want this prompt, set EDITOR to your fav editor)" EDITOR
+        $EDITOR PKGBUILD
+    ;;
+    esac
+
+    # now we can run `makepkg -sci`. we don't need t worry about dependencies since this is a update and not an install
+    # we can safely assume that all the dependencies are installed
+    makepkg -sci
+
+    # wait for all the processes to finish
+    wait
+done
