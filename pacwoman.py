@@ -8,6 +8,7 @@ import argparse
 import shutil
 import tarfile
 import os
+import sys
 import json
 from getpass import getuser
 
@@ -41,10 +42,10 @@ def retrieve_file(package_name):
     except urllib.error.HTTPError:
         if configuration.insults == True:
             error_insults.print_insult()
-            exit()
+            sys.exit()
         else:
             print ("{0}error:{1} target not found: {2}".format(configuration.color_error, configuration.color_normal, package_name))
-            exit()
+            sys.exit()
         
 def extract_tar(package_name):
 #extracts the downloaded tar and saves it in the cwd.
@@ -66,7 +67,7 @@ def cd_to_package_dir():
     if cd_to_dir.lower() == "yes" or cd_to_dir.lower() == "y":
         subprocess.Popen("cd {0}".format(package_name), shell=True)
     elif cd_to_dir.lower() == "no" or cd_to_dir.lower() == "n":
-        exit()
+        sys.exit()
     else:
         print ("error: invalid input")
 
@@ -98,15 +99,16 @@ def smart_update_package():
         package_data = search.search(package_name, "name")
         for result in package_data["results"]: 
             if result["Name"] == package_name: 
-                aur_package_with_ver = "{0} {1}".format(result["Name"], result["Version"])
-                package_update_count += 1
+                aur_package_with_ver = "{0} {1}".format(result["Name"], result["Version"]) 
                 for package_with_ver in installed_packages_ver:
                     if package_with_ver != aur_package_with_ver: 
                         retrieve_file(package_name)
                         extract_tar(package_name)
+                        package_update_count += 1
                         break #exit out of the loop after downloading the updated package
-    if not package_update_count:
-        print("all packages up to date")
+    
+    if package_update_count == 0:
+        print("all packages are up to date")
 
 
 #make all the arguments
