@@ -72,6 +72,9 @@ def cd_to_package_dir():
 
 # update all packages which are not up-to-date
 def smart_update_package():
+    # init count of packages to be updated
+    package_update_count = 0
+
     # get packages installed with their version number
     get_package_with_ver = subprocess.Popen("pacman -Qm > ./ver_packages.txt", shell=True)
     get_package_with_ver.wait() 
@@ -96,11 +99,15 @@ def smart_update_package():
         for result in package_data["results"]: 
             if result["Name"] == package_name: 
                 aur_package_with_ver = "{0} {1}".format(result["Name"], result["Version"])
+                package_update_count += 1
                 for package_with_ver in installed_packages_ver:
                     if package_with_ver != aur_package_with_ver: 
                         retrieve_file(package_name)
                         extract_tar(package_name)
                         break #exit out of the loop after downloading the updated package
+    if not package_update_count:
+        print("all packages up to date")
+
 
 #make all the arguments
 parser = argparse.ArgumentParser()
