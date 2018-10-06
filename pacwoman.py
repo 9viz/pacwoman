@@ -25,7 +25,7 @@ if getuser() == "root" and configuration.root_execute == False:
 directory = os.getcwd()
 
 #change all colors to empty strings if colored_output is set to False in configuration.py
-if configuration.colored_output == False:
+if not configuration.colored_output:
     configuration.color_normal = ""
     configuration.color_error = ""
     configuration.color_successful = ""
@@ -46,6 +46,8 @@ def retrieve_file(package_name):
         else:
             print ("{0}error:{1} target not found: {2}".format(configuration.color_error, configuration.color_normal, package_name))
             sys.exit()
+    except KeyboardInterrupt:
+        sys.exit()
         
 def extract_tar(package_name):
 #extracts the downloaded tar and saves it in the cwd.
@@ -58,6 +60,7 @@ def extract_tar(package_name):
     print ("{0}extracted:{1} downloaded {2}.tar.gz has been extracted".format(configuration.color_successful, configuration.color_normal, package_name))
     try:
         subprocess.Popen("rm -rf {0}".format(tar_package), shell=True)
+        wait()
         print ("{0}removed: {1}tar package has been removed and the contents has been stored in {2}/{3}".format(configuration.color_progress, configuration.color_normal, directory, package_name))
     except:
         print ("{0}error:{1} can't remove downloaded tarball, please remove it manually").format(configuration.color_error, configuration.color_normal)
@@ -66,10 +69,8 @@ def cd_to_package_dir():
     cd_to_dir = input("do you want to cd into the package directory? (y/n) ")
     if cd_to_dir.lower() == "yes" or cd_to_dir.lower() == "y":
         subprocess.Popen("cd {0}".format(package_name), shell=True)
-    elif cd_to_dir.lower() == "no" or cd_to_dir.lower() == "n":
-        sys.exit()
     else:
-        print ("error: invalid input")
+        sys.exit()
 
 # update all packages which are not up-to-date
 def smart_update_package():
@@ -97,16 +98,19 @@ def smart_update_package():
     # if it is, update; else, break the loop 
     for package_name in installed_packages:
         package_data = search.search(package_name, "name")
-        for result in package_data["results"]: 
+        for result in package_data["results"]:
+            # check if the package name is exactly the same. lemonbar matches only to lemonbar and not lemonbar-xft-git
             if result["Name"] == package_name: 
                 aur_package_with_ver = "{0} {1}".format(result["Name"], result["Version"]) 
                 for package_with_ver in installed_packages_ver:
+                    # if the version of the package installed in the system is not equal to the version in the aur, update
                     if package_with_ver != aur_package_with_ver: 
                         retrieve_file(package_name)
                         extract_tar(package_name)
                         package_update_count += 1
-                        break #exit out of the loop after downloading the updated package
-    
+                        # exit out of loop after we download package 
+                        break
+
     if package_update_count == 0:
         print("all packages are up to date")
 

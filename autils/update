@@ -1,8 +1,8 @@
 #!/bin/dash
 # A wrapper script around pacwoman to automatically update all the packages
+
 # pacwoman path. since this script is personal, I set it to my mine
 pacwoman="$HOME/usr/src/pacwoman/pacwoman.py"
-EDITOR="nvim"
 
 # let's switch to a dir in /tmp to avoid puking in current working directory
 # but ofc, we need to make a directory first

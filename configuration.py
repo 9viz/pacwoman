@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import yaml
 import os
 
@@ -25,7 +24,7 @@ def readConfig(file_name):
     with open(file_name.strip("\n"), "r") as config_file:
         config = yaml.load(config_file) 
 
-if os.path.isfile("{0}/.cache/pacwoman/config_path".format(os.getenv("HOME"))) == False:
+if not os.path.isfile("{0}/.cache/pacwoman/config_path".format(os.getenv("HOME"))):
     readConfig("{0}/res/config.yaml".format(os.path.realpath(__file__).strip("configuration.py")))
 else:
     getConfigDir()

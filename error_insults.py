@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 
 from random import randint
 
@@ -15,7 +14,7 @@ error_insults = [
         ]
 
 def print_insult():
-    num_insults = len(error_insults)
-    random_insult_index = randint(0, num_insults - 1)
+    num_insults = len(error_insults) - 1
+    random_insult_index = randint(0, num_insults)
     insult = error_insults[random_insult_index]
     print(insult)
