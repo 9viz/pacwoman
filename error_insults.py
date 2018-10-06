@@ -42,7 +42,7 @@ ohhhs+++++/++++++++++/s:
     `:+ooo+sd:.:my+o+-   
   `.-:+++yy+++/+o+:/.    
 /:+oooooooooo+oo+:+++/-`"
-        ":jerry:
+        ":jerry:"
         ]
 
 def print_insult():
