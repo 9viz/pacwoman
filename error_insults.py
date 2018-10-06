@@ -31,4 +31,4 @@ error_insults = [
         ]
 
 def print_insult():
-    print(choice(insult))
+    print(choice(error_insults))
