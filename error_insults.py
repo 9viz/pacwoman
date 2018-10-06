@@ -28,7 +28,22 @@ error_insults = [
         "Listen, brocolli brains, I don't have time to listen to this trash",
         "I've seen penguins that can type better than that",
         "Have a gorilla..."
+        "I think you'd have better luck on Gentoo..."
+        "
+  .ss+-                  
+ :hhhy+:          .-:+so.
+.yhhhh+o/--::/:::/++yhhy/
+ohhhhy+oo+o++ooo++/+yhhy:
+yhhss++++++:/+o++///+sys`
+ohhhs+++++/++++++++++/s: 
+.yhhsooo++o++++++//+++.  
+ :yhooooooo+/o++o//+++`  
+  `/+oooooo/oo::so/+o/   
+    `:+ooo+sd:.:my+o+-   
+  `.-:+++yy+++/+o+:/.    
+/:+oooooooooo+oo+:+++/-`"
+        ":jerry:"
         ]
 
 def print_insult():
-    print(choice(error_insults))
+    print(choice(insult))
