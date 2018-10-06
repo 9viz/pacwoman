@@ -1,7 +1,7 @@
 
-from random import randint
+from random import choice as random_choice
 
-error_insults = [
+ERROR_INSULTS = [
         "I have been called worse",
         "Oh man. We almost had it. It's gone now!",
         "What is this? Amateur hour?",
@@ -14,7 +14,4 @@ error_insults = [
         ]
 
 def print_insult():
-    num_insults = len(error_insults) - 1
-    random_insult_index = randint(0, num_insults)
-    insult = error_insults[random_insult_index]
-    print(insult)
+    print(random_choice(ERROR_INSULTS))
