@@ -40,7 +40,7 @@ def retrieve_file(package_name):
             shutil.copyfileobj(response, out_file)
         print ("{0}downloaded:{1} {2}.tar.gz has saved to {3}".format(configuration.color_successful, configuration.color_normal, package_name, directory))
     except urllib.error.HTTPError:
-        if configuration.insults == True:
+        if configuration.insults:
             error_insults.print_insult()
             sys.exit()
         else:

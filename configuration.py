@@ -3,12 +3,13 @@ import os
 
 # write config file path name in $HOME/.cache/pacwoman/configpath
 def writeConfigDir(config_path):
-    if os.path.exists("{0}/.cache/pacwoman".format(os.getenv("HOME"))):
-        with open("{0}/.cache/pacwoman/config_path".format(os.getenv("HOME")), "w+") as configpath:
+    path = "{0}/.cache/pacwoman".format(os.getnev("HOME"))
+    if os.path.exists(path):
+        with open("{0}/config_path".format(path), "w+") as configpath:
             configpath.write(config_path)
     else:
-        os.mkdir("{0}/.cache/pacwoman".format(os.getenv("HOME")))
-        with open("{0}/.cache/pacwoman/config_path".format(os.getenv("HOME")), "w+") as configpath:
+        os.mkdir(path)
+        with open("{0}/config_path".format(path), "w+") as configpath:
             configpath.write(config_path)
 
 # read config file directory
