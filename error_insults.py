@@ -1,6 +1,6 @@
-
 from random import choice 
 
+# error insults from diamondburned and sudo's header files
 error_insults = [
         "I have been called worse",
         "Oh man. We almost had it. It's gone now!",
@@ -17,7 +17,17 @@ error_insults = [
         "Let me show you this magical thing called Google...",
         "Get out. I don't care.",
         "I thought we learned how to ask back in kindergarten?",
-        "If I own a company, I'd hire you as a beta tester, since you make so many mistakes."
+        "If I own a company, I'd hire you as a beta tester, since you make so many mistakes.",
+        "Just what do you think you're doing Dave?",
+        "That's something I cannot allow to happen",
+        "Take a stress pill and think things over",
+        "Sorry about this, I know it's a bit silly",
+        "And you call yourself a Rocket Scientist!",
+        "Wrong! You cheating scum!",
+        "Maybe if you used more than just two fingers...",
+        "Listen, brocolli brains, I don't have time to listen to this trash",
+        "I've seen penguins that can type better than that",
+        "Have a gorilla..."
         ]
 
 def print_insult():
