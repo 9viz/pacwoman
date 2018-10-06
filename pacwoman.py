@@ -12,26 +12,28 @@ import sys
 import json
 from getpass import getuser
 
-#import files
+# import files
 import configuration
 import error_insults
 import search
 
 def retrieve_file(package_name):
-#retrieves file from the AUR and saves it to the current working dir 
+    #retrieves file from the AUR and saves it to the current working dir 
     url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/" + \
         package_name + ".tar.gz"
     tar_package = package_name + ".tar.gz"
     try:
         with urllib.request.urlopen(url_package) as response, open(tar_package, 'wb') as out_file:
             shutil.copyfileobj(response, out_file)
-        print ("{0}downloaded:{1} {2}.tar.gz has saved to {3}".format(configuration.color_successful, configuration.color_normal, package_name, directory))
+        print ("{0}downloaded:{1} {2}.tar.gz has saved to {3}"\
+                .format(configuration.color_successful, configuration.color_normal, package_name, directory))
     except urllib.error.HTTPError:
         if configuration.insults:
             error_insults.print_insult()
             sys.exit()
         else:
-            print ("{0}error:{1} target not found: {2}".format(configuration.color_error, configuration.color_normal, package_name))
+            print ("{0}error:{1} target not found: {2}"\
+                    .format(configuration.color_error, configuration.color_normal, package_name))
             sys.exit()
     except KeyboardInterrupt:
         sys.exit()
@@ -62,7 +64,7 @@ def extract_tar(package_name):
         print(configuration.color_error + "error:" + \
             configuration.color_normal + " can't remove downloaded tarball" + \
             ", please remove it manually")
-
+        
 def cd_to_package_dir():
     cd_to_dir = input("do you want to cd into the package directory? (y/n) ")
     cd_to_dir = cd_to_dir.lower()
