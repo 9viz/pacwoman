@@ -37,6 +37,8 @@ I want this project to stay simple and hackable, and follow the suckless philosh
 * Be a wrapper around pacman, like yay.
 * Resolve AUR dependencies.
 
-# Credits
+# Contributors 
 
-The logo was made by [0xfi](https://github.com/0xfi)
+* The logo was made by [0xfi](https://github.com/0xfi)
+* Major refactoring of code was done by [Sweets](https://github.com/Sweets)
+* Error insults from sudo file headers and by [Diamond](https://github.com/diamondburned)
