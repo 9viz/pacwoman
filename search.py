@@ -18,7 +18,7 @@ def pretty_print_json(json_data):
     nth_iteration = 0
     num_results = len(json_data["results"])
 
-    print(heading("Results") + "\n")
+    print(heading("Results")  + str(num_results) + "\n")
 
     data_points = ["Name", "Version", "Maintainer", "Description"]
 
@@ -27,7 +27,7 @@ def pretty_print_json(json_data):
         output = ""
 
         for data_point in data_points:
-            output += heading(data_point) + package.get(data_point) + "\n"
+            output += heading(data_point) + str(package.get(data_point)) + "\n"
 
         if nth_iteration < num_results:
             output += "\n"

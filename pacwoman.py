@@ -54,8 +54,8 @@ def extract_tar(package_name):
         ".tar.gz has been extracted")
 
     try:
-        subprocess.Popen("rm -rf {0}".format(tar_package), shell=True)
-        wait()
+        rm_tar = subprocess.Popen("rm -rf {0}".format(tar_package), shell=True)
+        rm_tar.wait()
         print(configuration.color_progress + "removed:" + \
             configuration.color_normal + " tar package has been removed" + \
             " and the contents have been stored in %s/%s" % (directory,
@@ -121,12 +121,12 @@ def smart_update_package():
 
 
 if __name__ == '__main__':
-    error = lambda text: configuration.color_error + "Error:" + \
+    error = lambda text: configuration.color_error + "error:" + \
         configuration.color_normal + " " + text
 
     #get username
     if getuser() == "root" and not configuration.root_execute:
-        print(error("This program is not allowed to be used as the root user"))
+        print(error("this program is not allowed to be used as the root user"))
         exit(1)
 
     #get current directory
@@ -154,7 +154,7 @@ if __name__ == '__main__':
         for package_name in package_list:
             retrieve_file(package_name)
             extract_tar(package_name)
-            if configuration.cd_to_package == True:
+            if configuration.cd_to_package:
                 cd_to_package_dir()
     elif args.Syu:
         # read comments in the function to understand how it works.
@@ -165,6 +165,9 @@ if __name__ == '__main__':
             search_data = search.search(package_name, configuration.search_type)
             search.pretty_print_json(search_data)
     elif args.c:
-        configuration.writeConfigDir(os.path.abspath(args.c))
+        if os.path.isfile(args.c): 
+            configuration.writeConfigDir(os.path.abspath(args.c))
+        else:
+            print(error("file does not exists"))
     else:
-        print(error("No argument given. Launch 'pacmwoman -h' for the options available."))
+        print(error("no argument given. launch 'pacmwoman -h' for the options available."))

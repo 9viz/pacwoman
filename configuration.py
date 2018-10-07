@@ -28,22 +28,27 @@ def readConfig(file_name):
     with open(file_name.strip("\n"), "r") as config_file:
         config = yaml.load(config_file) 
 
+getEscapeSeq = lambda str_seq: bytes(str_seq, "utf-8").decode("unicode_escape")
 
-## TODO: below
-if not os.path.isfile("{0}/.cache/pacwoman/config_path".format(os.getenv("HOME"))):
-    readConfig("{0}/res/config.yaml".format(os.path.realpath(__file__).strip("configuration.py")))
-else:
+file_config_path = os.path.join(os.getenv("HOME"), ".cache",\
+        "pacwoman", "config_path")
+default_config_path = os.path.join(os.path.abspath(__file__)\
+        .strip("configuration.py"), "res", "config.yaml")
+
+if os.path.isfile(file_config_path): 
     getConfigDir()
     readConfig(config_path)
+else:
+    readConfig(default_config_path)
 
 # set all variables
-insults = config["insults"]
-colored_output = config["colored_output"]
-color_normal = bytes(config["color_normal"], "utf-8").decode("unicode_escape")
-color_error = bytes(config["color_error"], "utf-8").decode("unicode_escape")
-color_successful = bytes(config["color_successful"], "utf-8").decode("unicode_escape")
-color_progress = bytes(config["color_progress"], "utf-8").decode("unicode_escape")
-color_search_heading = bytes(config["color_search_heading"], "utf-8").decode("unicode_escape")
-cd_to_package = config["cd_to_package"]
-root_execute = config["root_execute"]
-search_type = config["search_type"]
+insults = config.get("insults", False)
+colored_output = config.get("colored_output")
+color_normal = getEscapeSeq(config.get("color_normal", "")) 
+color_error = getEscapeSeq(config.get("color_error", ""))
+color_successful = getEscapeSeq(config.get("color_successful", ""))
+color_progress = getEscapeSeq(config.get("color_progress", ""))
+color_search_heading = getEscapeSeq(config.get("color_search_heading", ""))
+cd_to_package = config.get("cd_to_package")
+root_execute = config.get("root_execute")
+search_type = config.get("search_type", None)
