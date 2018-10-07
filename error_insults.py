@@ -1,7 +1,7 @@
 from random import choice 
 
+ERROR_INSULTS = [
 # error insults from diamondburned and sudo's header files
-error_insults = [
         "I have been called worse",
         "Oh man. We almost had it. It's gone now!",
         "What is this? Amateur hour?",

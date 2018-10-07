@@ -8,33 +8,39 @@ import urllib.request
 import configuration
 
 # set search's heading to an empty str if colored output is set to False
-if configuration.colored_output == False:
+if not configuration.colored_output:
     configuration.color_search_heading = ""
 
 def pretty_print_json(json_data):
+    heading = lambda text: configuration.color_search_heading + text + ":" + \
+        configuration.color_normal + " "
+
     nth_iteration = 0
     num_results = len(json_data["results"])
-    print("{0}Results:{1} {2}\n".format(configuration.color_search_heading, configuration.color_normal, num_results))
+
+    print(heading("Results") + "\n")
+
+    data_points = ["Name", "Version", "Maintainer", "Description"]
+
     for package in json_data["results"]:
-        package_name = package["Name"]
-        print("{0}Name:{1} {2}".format(configuration.color_search_heading, configuration.color_normal, package_name))
-        package_version = package["Version"]
-        print("{0}Version:{1} {2}".format(configuration.color_search_heading, configuration.color_normal, package_version))
-        package_maintainer = package["Maintainer"]
-        print("{0}Maintainer:{1} {2}".format(configuration.color_search_heading, configuration.color_normal, package_maintainer))
-        package_description = package["Description"]
-        print("{0}Description:{1} {2}".format(configuration.color_search_heading, configuration.color_normal, package_description))
         nth_iteration += 1
-        if num_results > 1 and nth_iteration != num_results:
-            print("\n")
+        output = ""
+
+        for data_point in data_points:
+            output += heading(data_point) + package.get(data_point) + "\n"
+
+        if nth_iteration < num_results:
+            output += "\n"
+
+        print(output)
 
 def search(package_name, search_type):
-    if search_type == "none" or search_type == None:
-        rpc_url = "https://aur.archlinux.org/rpc/?v=5&type=search&arg={0}".format(package_name)
-    else:
-        rpc_url = "https://aur.archlinux.org/rpc/?v=5&type=search&by={0}&arg={1}".format(search_type, package_name)
-    # get json
-    search_data = urllib.request.urlopen(rpc_url)
-    # decode json to python 
-    search_data = json.loads(search_data.read())
+    base_url = "https://aur.archlinux.org/rpc/?v=5&type=search&arg=" + \
+        package_name
+
+    if search_type != "none" or search_type != None:
+        rpc_url = base_url + "&by=" + search_type
+
+    search_data = urllib.request.urlopen(rpc_url).read()
+    search_data = json.loads(search_data)
     return search_data 
