@@ -166,7 +166,7 @@ if __name__ == '__main__':
             search.pretty_print_json(search_data)
     elif args.c:
         if os.path.isfile(args.c): 
-            configuration.writeConfigDir(os.path.abspath(args.c))
+            configuration.write_config_dir(os.path.abspath(args.c))
         else:
             print(error("file does not exists"))
     else:
