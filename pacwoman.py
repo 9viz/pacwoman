@@ -146,28 +146,32 @@ if __name__ == '__main__':
     parser.add_argument("-Syu", "-u", "--update", help="download all the AUR package user has", action = "store_true")
     parser.add_argument("-s", "--search", metavar="", help="fetch data of the package using the AUR RPC interface", nargs="+")
     parser.add_argument("-c", "--config-path", help="set the config file directory", metavar=" ")
+    parser.add_argument("-p", "--package-detail", help="get details of the given package alone", metavar="")
     args = parser.parse_args()
     #end all arguments
-
-    if args.S: 
-        package_list = args.S
+    
+    if args.download: 
+        package_list = args.download
         for package_name in package_list:
             retrieve_file(package_name)
             extract_tar(package_name)
             if configuration.cd_to_package:
                 cd_to_package_dir()
-    elif args.Syu:
+    elif args.update:
         # read comments in the function to understand how it works.
         smart_update_package()
-    elif args.s:
-        package_list = args.s
+    elif args.search:
+        package_list = args.search
         for package_name in package_list:
             search_data = search.search(package_name, configuration.search_type)
             search.pretty_print_json(search_data)
-    elif args.c:
-        if os.path.isfile(args.c): 
+    elif args.config_path:
+        if os.path.isfile(args.config_path): 
             configuration.write_config_dir(os.path.abspath(args.c))
         else:
             print(error("file does not exists"))
+    elif args.package_detail:
+        json_data = search.search(args.package_detail, "name") 
+        search.package_deatil(args.package_detail, json_data)
     else:
         print(error("no argument given. launch 'pacmwoman -h' for the options available."))

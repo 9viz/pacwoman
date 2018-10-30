@@ -43,4 +43,18 @@ def search(package_name, search_type):
 
     search_data = urllib.request.urlopen(rpc_url).read()
     search_data = json.loads(search_data)
-    return search_data 
+    return search_data
+
+def package_deatil(package_name, json_data):
+    heading = lambda text: configuration.color_search_heading + text + ":" + \
+        configuration.color_normal + " "
+
+    data_points = ["Name", "Version", "Maintainer", "Description"]
+    details = ""
+
+    for package in json_data["results"]:
+        if package["Name"] == package_name:
+            for data_point in data_points:
+                details += heading(data_point) + str(package.get(data_point)) + "\n"
+
+    print(details)
