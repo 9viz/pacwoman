@@ -142,10 +142,10 @@ if __name__ == '__main__':
 
     #make all the arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("-S", metavar="", help="download package from AUR", nargs="+", default=None)
-    parser.add_argument("-Syu", help="download all the AUR package user has", action = "store_true")
-    parser.add_argument("-s", metavar="", help="fetch data of the package using the AUR RPC interface", nargs="+")
-    parser.add_argument("-c", help="set the config file directory", metavar=" ")
+    parser.add_argument("-S", "-d", "--download", metavar="", help="download package from AUR", nargs="+", default=None)
+    parser.add_argument("-Syu", "-u", "--update", help="download all the AUR package user has", action = "store_true")
+    parser.add_argument("-s", "--search", metavar="", help="fetch data of the package using the AUR RPC interface", nargs="+")
+    parser.add_argument("-c", "--config-path", help="set the config file directory", metavar=" ")
     args = parser.parse_args()
     #end all arguments
 
