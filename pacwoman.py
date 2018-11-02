@@ -174,4 +174,4 @@ if __name__ == '__main__':
         json_data = search.search(args.package_detail, "name") 
         search.package_deatil(args.package_detail, json_data)
     else:
-        print(error("no argument given. launch 'pacmwoman -h' for the options available."))
+        parser.print_help()
