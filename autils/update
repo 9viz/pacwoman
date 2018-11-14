@@ -5,19 +5,18 @@
 pacwoman="$HOME/usr/src/pacwoman/pacwoman.py"
 
 # let's switch to a dir in /tmp to avoid puking in current working directory
-# but ofc, we need to make a directory first
-mkdir -p /tmp/aur_update/packages
-cd /tmp/aur_update/packages
-
 # let's store this directory in var
+# but ofc, we need to make a directory first
 pkgs_dir="/tmp/aur_update/packages"
+mkdir -p $pkgs_dir
+cd $pkgs_dir
 
 # let's call pacwoman to download all the AUR packages
 echo "calling pacwoman to download outdated packages"
 python3 $pacwoman -Syu
 
 # let's check if there are packages to be actually updated
-num_dir="$(ls /tmp/aur_update/packages | wc -l)"
+num_dir="$(ls $pkgs_dir | wc -l)"
 
 # now, we have to loop through all the directories and update each package
 for pkg_dir in $pkgs_dir
@@ -25,6 +24,7 @@ do
     # break if no packages are downloaded
     # we don't need to echo a message saying that the packages are up to date since pacwoman already does that for us
     [ $num_dir -eq 0 ] && break
+    
     cd $pkg_dir
 
     echo "current package is ${pkg_dir}"
