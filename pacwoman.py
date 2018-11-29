@@ -30,13 +30,13 @@ def retrieve_file(package_name):
     except urllib.error.HTTPError:
         if configuration.insults:
             error_insults.print_insult()
-            sys.exit()
+            sys.exit(1)
         else:
             print ("{0}error:{1} target not found: {2}"\
                     .format(configuration.color_error, configuration.color_normal, package_name))
-            sys.exit()
+            sys.exit(1)
     except KeyboardInterrupt:
-        sys.exit()
+        sys.exit(1)
         
 def extract_tar(package_name):
     #extracts the downloaded tar and saves it in the cwd.
@@ -71,7 +71,7 @@ def cd_to_package_dir():
     if cd_to_dir in ["yes", "y"]:
         subprocess.Popen("cd " + package_name, shell=True)
     else:
-        sys.exit()
+        sys.exit(0)
 
 # update all packages which are not up-to-date
 def smart_update_package():
@@ -142,11 +142,19 @@ if __name__ == '__main__':
 
     #make all the arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("-S", "-d", "--download", metavar="", help="download package from AUR", nargs="+", default=None)
-    parser.add_argument("-Syu", "-u", "--update", help="download all the AUR package user has", action = "store_true")
-    parser.add_argument("-s", "--search", metavar="", help="fetch data of the package using the AUR RPC interface", nargs="+")
-    parser.add_argument("-c", "--config-path", help="set the config file directory", metavar=" ")
-    parser.add_argument("-p", "--package-detail", help="get details of the given package alone", metavar="")
+    parser.add_argument("-S", "-d", "--download", metavar="",\
+        help="download package from AUR", nargs="+", default=None)
+    parser.add_argument("-Syu", "-u", "--update", help="download "+\
+        "all the AUR package user has", action = "store_true")
+    parser.add_argument("-s", "--search", metavar="",\
+        help="fetch data of the package using the AUR RPC interface", nargs="+")
+    parser.add_argument("-c", "--config-path", help="set "+\
+        "the config file directory", metavar=" ")
+    parser.add_argument("-p", "--package-detail",\
+        help="get details of the given package alone", metavar="")
+    parser.add_argument("-D", "--depends",\
+        help="get the dependencies of the give package", metavar="")
+    parser.add_argument
     args = parser.parse_args()
     #end all arguments
     
@@ -173,5 +181,7 @@ if __name__ == '__main__':
     elif args.package_detail:
         json_data = search.search(args.package_detail, "name") 
         search.package_deatil(args.package_detail, json_data)
+    elif args.depends:
+        search.get_depends(args.depends)
     else:
         parser.print_help()

@@ -1,0 +1,82 @@
+#!/bin/dash
+# a wrapper around pacwoman to install packages
+# this also tries to resolve aur dependencies
+
+# some global vars
+packages_file="/tmp/packages"
+# pacwoman's main file. relative path
+pacwoman="$HOME/usr/src/pacwoman/pacwoman.py"
+# create tmp directory
+[ ! -d "/tmp/packages_cache" ] && mkdir "/tmp/packages_cache"
+
+_write_packages() {
+    # write all the aur packages
+    # makepkg handles regular packages
+    echo "$(pacman -Qq)" > $packages_file
+}
+
+_check_package_presence() {
+    local package="$1"
+    # all the packages
+    local packages="$2"
+
+    # if the package is not present, echo 0
+    if [ -z "$(echo "$packages" | grep -o "$package")" ]; then
+        echo 0
+    else
+        echo 1
+    fi
+}
+
+_install_package() {
+    local package="$1"
+
+    # download the aur package
+    cd "/tmp/packages_cache"
+    
+    echo "downloading $package"
+    python3 "$pacwoman" -S $package
+    local status=$(echo $?)
+
+    if [ $status -ne 0 ]; then
+        echo "package not in aur"
+        sudo pacman -S $package
+        return
+    fi
+
+    cd $package
+    # ask the user if they want to edit the pkgbuild
+    read -p "do you want to edit the PKGBUILD [y/n]? " to_edit
+
+    case "$to_edit" in
+        *y*|*yes*)
+            [ -z $EDITOR ] && read -p "enter your editor " editor
+            $EDITOR PKGBUILD
+    esac
+    
+    echo "installing package"
+    makepkg -sci
+}
+
+_get_depends() {
+    python3 "$pacwoman" -D "$1"
+}
+
+_write_packages
+installed_packages="$(cat /tmp/packages)"
+
+for package in $@; do
+    # get the dependencies
+    depends="$(_get_depends "$package")"
+    
+    # install dependencies
+    for depend in $depends; do
+        [ $(_check_package_presence "$depend" "$installed_packages") = 0 ] &&\
+            _install_package $depend
+    done
+
+    # install the package
+    _install_package $package
+done
+
+rm -rf "/tmp/packages_cache"

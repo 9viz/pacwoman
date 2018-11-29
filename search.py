@@ -58,3 +58,18 @@ def package_deatil(package_name, json_data):
                 details += heading(data_point) + str(package.get(data_point)) + "\n"
 
     print(details)
+
+def get_depends(package_name):
+    data = urllib.request.urlopen("https://aur.archlinux.org/rpc/?v=5&" +\
+        "type=multiinfo&arg=" + package_name).read()
+
+    data = json.loads(data)
+
+    results = data.get("results")
+ 
+    for result in results:
+        if result.get("Name") == package_name:
+            depends = result.get("Depends")
+
+            for depend in depends:
+                print(depend)
