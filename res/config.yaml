@@ -6,7 +6,7 @@ insults: false
 # default is false
 colored_output: false
 
-# NOTE: this get ignored if you set colored_output to false
+# NOTE: this gets ignored if you set colored_output to false
 # color declarations in ANSI code
 color_normal: \033[0m # default: white
 color_error: \033[1;31m # default: red
@@ -31,4 +31,4 @@ root_execute: false
 # none searches for everything
 # NOTE: It is important that you don't assign an invalid value to the variable. If you do, search simply won't work!
 # default is name
-search_type: name 
+search_type: name
