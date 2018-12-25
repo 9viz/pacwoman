@@ -18,7 +18,7 @@ import error_insults
 import search
 
 def retrieve_file(package_name):
-    #retrieves file from the AUR and saves it to the current working dir 
+    #retrieves file from the AUR and saves it to the current working dir
     url_package = "https://aur.archlinux.org/cgit/aur.git/snapshot/" + \
         package_name + ".tar.gz"
     tar_package = package_name + ".tar.gz"
@@ -37,7 +37,7 @@ def retrieve_file(package_name):
             sys.exit(1)
     except KeyboardInterrupt:
         sys.exit(1)
-        
+
 def extract_tar(package_name):
     #extracts the downloaded tar and saves it in the cwd.
     #deletes the downloaded tar to prevent duplicates and confusion.
@@ -64,7 +64,7 @@ def extract_tar(package_name):
         print(configuration.color_error + "error:" + \
             configuration.color_normal + " can't remove downloaded tarball" + \
             ", please remove it manually")
-        
+
 def cd_to_package_dir():
     cd_to_dir = input("do you want to cd into the package directory? (y/n) ")
     cd_to_dir = cd_to_dir.lower()
@@ -87,7 +87,7 @@ def smart_update_package():
         installed_packages_ver = [package.strip() for package in packages]
     rm_file = subprocess.Popen("rm -rf ./ver_packages.txt", shell=True)
     rm_file.wait()
-    
+
     # get packages installed without version number
     get_package = subprocess.Popen("pacman -Qqm > ./packages.txt", shell=True)
     get_package.wait()
@@ -96,24 +96,24 @@ def smart_update_package():
         installed_packages = [package.strip() for package in packages]
     rm_file = subprocess.Popen("rm -rf ./packages.txt", shell=True)
     rm_file.wait()
-   
+
     # really loopy way to download packages. explanation below
     # check if the package with the version in the user system is equal to the package with the version available in the aur
-    # if it is, update; else, break the loop 
+    # if it is, update; else, break the loop
     for package_name in installed_packages:
         package_data = search.search(package_name, "name")
         for result in package_data["results"]:
             # check if the package name is exactly the same. lemonbar matches only to lemonbar and not lemonbar-xft-git
-            if result["Name"] == package_name: 
+            if result["Name"] == package_name:
                 aur_package_with_ver = "%s %s" % (result["Name"],
-                    result["Version"]) 
+                    result["Version"])
                 for package_with_ver in installed_packages_ver:
                     # if the version of the package installed in the system is not equal to the version in the aur, update
-                    if package_with_ver != aur_package_with_ver: 
+                    if package_with_ver != aur_package_with_ver:
                         retrieve_file(package_name)
                         extract_tar(package_name)
                         package_update_count += 1
-                        # exit out of loop after we download package 
+                        # exit out of loop after we download package
                         break
 
     if package_update_count == 0:
@@ -154,11 +154,10 @@ if __name__ == '__main__':
         help="get details of the given package alone", metavar="")
     parser.add_argument("-D", "--depends",\
         help="get the dependencies of the give package", metavar="")
-    parser.add_argument
     args = parser.parse_args()
     #end all arguments
-    
-    if args.download: 
+
+    if args.download:
         package_list = args.download
         for package_name in package_list:
             retrieve_file(package_name)
@@ -174,12 +173,12 @@ if __name__ == '__main__':
             search_data = search.search(package_name, configuration.search_type)
             search.pretty_print_json(search_data)
     elif args.config_path:
-        if os.path.isfile(args.config_path): 
+        if os.path.isfile(args.config_path):
             configuration.write_config_dir(os.path.abspath(args.c))
         else:
             print(error("file does not exists"))
     elif args.package_detail:
-        json_data = search.search(args.package_detail, "name") 
+        json_data = search.search(args.package_detail, "name")
         search.package_deatil(args.package_detail, json_data)
     elif args.depends:
         search.get_depends(args.depends)

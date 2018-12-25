@@ -28,6 +28,10 @@ check_package_presence() {
     fi
 }
 
+get_depends() {
+    python3 "$pacwoman" -D "$1"
+}
+
 install_package() {
     local package="$1"
 
@@ -58,10 +62,6 @@ install_package() {
     makepkg -sci
 }
 
-get_depends() {
-    python3 "$pacwoman" -D "$1"
-}
-
 write_packages
 installed_packages="$(cat /tmp/packages)"
 
@@ -71,6 +71,10 @@ for package in $@; do
 
     # install dependencies
     for depend in $depends; do
+        for dep in $(get_depends "$depend"); do
+            [ $(check_package_presence "$dep" "$installed_packages") = 0 ] &&\
+                install_package $dep
+        done
         [ $(check_package_presence "$depend" "$installed_packages") = 0 ] &&\
             install_package $depend
     done
