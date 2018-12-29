@@ -54,7 +54,7 @@ def extract_tar(package_name):
         ".tar.gz has been extracted")
 
     try:
-        rm_tar = subprocess.Popen("rm -rf {0}".format(tar_package), shell=True)
+        rm_tar = subprocess.Popen(f"rm -rf {tar_package}", shell=True)
         rm_tar.wait()
         print(configuration.color_progress + "removed:" + \
             configuration.color_normal + " tar package has been removed" + \
@@ -69,7 +69,7 @@ def cd_to_package_dir():
     cd_to_dir = input("do you want to cd into the package directory? (y/n) ")
     cd_to_dir = cd_to_dir.lower()
     if cd_to_dir in ["yes", "y"]:
-        subprocess.Popen("cd " + package_name, shell=True)
+        subprocess.Popen(f"cd {package_name}", shell=True)
     else:
         sys.exit(0)
 
@@ -164,23 +164,23 @@ if __name__ == '__main__':
             extract_tar(package_name)
             if configuration.cd_to_package:
                 cd_to_package_dir()
-    elif args.update:
+    if args.update:
         # read comments in the function to understand how it works.
         smart_update_package()
-    elif args.search:
+    if args.search:
         package_list = args.search
         for package_name in package_list:
             search_data = search.search(package_name, configuration.search_type)
             search.pretty_print_json(search_data)
-    elif args.config_path:
+    if args.config_path:
         if os.path.isfile(args.config_path):
             configuration.write_config_dir(os.path.abspath(args.c))
         else:
             print(error("file does not exists"))
-    elif args.package_detail:
+    if args.package_detail:
         json_data = search.search(args.package_detail, "name")
         search.package_deatil(args.package_detail, json_data)
-    elif args.depends:
+    if args.depends:
         search.get_depends(args.depends)
-    else:
+    if not len(sys.argv[1:]):
         parser.print_help()
