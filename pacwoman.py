@@ -116,7 +116,7 @@ def smart_update_package():
                         # exit out of loop after we download package
                         break
 
-    if package_update_count == 0:
+    if not package_update_count:
         print("all packages are up to date")
 
 
