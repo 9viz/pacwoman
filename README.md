@@ -27,17 +27,16 @@ The main reason why I adopted this "download-only" model is because I liked to r
 
 
 I want this project to stay simple and hackable, and follow the suckless philoshopy of keeping the source code less than 2000 lines. The latter is for me to write efficient code, and is an interesting challenge.
-
-# Goals for the future
-
-* Add some sort of tab-completion support.
+Moreover, I see pacwoman as a tool to script around rather a full blown AUR
+helper which does everything by itself. A couple of shitty helper scripts are in
+`autils` and I use them when I use Arch Linux. They are pretty okay.
 
 # (Non-)Features
 
 * Be a wrapper around pacman, like yay.
 * Resolve AUR dependencies.
 
-# Contributors 
+# Contributors
 
 * The logo was made by [0xfi](https://github.com/0xfi)
 * Major refactoring of code was done by [Sweets](https://github.com/Sweets)
